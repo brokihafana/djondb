@@ -404,7 +404,7 @@ DBCursor* const DBController::fetchCursor(const char* cursorId) {
 }
 
 DBCursor* DBController::cursor(const char* cursorId) {
-	std::map<const char*, DBCursor*>::iterator i = _cursors.find(cursorId);
+	std::map<const char*, DBCursor*, cmp_str>::iterator i = _cursors.find(cursorId);
 	if (i != _cursors.end()) {
 		return i->second;
 	} else {
@@ -413,7 +413,7 @@ DBCursor* DBController::cursor(const char* cursorId) {
 }
 
 void DBController::releaseCursor(const char* cursorId) {
-	std::map<const char*, DBCursor*>::iterator i = _cursors.find(cursorId);
+	std::map<const char*, DBCursor*, cmp_str>::iterator i = _cursors.find(cursorId);
 	if (i != _cursors.end()) {
 		DBCursor* cursor = i->second;
 

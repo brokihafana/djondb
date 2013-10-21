@@ -101,7 +101,7 @@ void DjondbCursor::retrieveCurrent() {
 }
 
 bool DjondbCursor::previous() {
-
+	return false;
 }
 
 void DjondbCursor::seek(__int32 position) {

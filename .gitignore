@@ -1,3 +1,4 @@
+
 *.so
 *.o
 *.tmp
@@ -32,5 +33,8 @@ Debug
 *.suo
 *.obj
 
-db/third_party/boost
-db/third_party
+db/third_party/libs
+db/third_party/includes
+[Bb]uild*
+[Rr]elease*
+[Dd]ebug*
