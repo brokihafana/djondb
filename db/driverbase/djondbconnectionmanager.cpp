@@ -40,7 +40,7 @@ DjondbConnectionManager::~DjondbConnectionManager()
 #endif
 }
 
-DjondbConnection* DjondbConnectionManager::getConnection(std::string host, int port) {
+DjondbConnection* DjondbConnectionManager::getConnection(const char* host, int port) {
 #ifdef WINDOWS
 	if (!__initialized) {
 		WORD wVersionRequested;
@@ -81,7 +81,7 @@ DjondbConnection* DjondbConnectionManager::getConnection(std::string host, int p
     return conn;
 }
 
-DjondbConnection* DjondbConnectionManager::getConnection(std::string host) {
+DjondbConnection* DjondbConnectionManager::getConnection(const char* host) {
 	return getConnection(host, SERVER_PORT);
 }
 

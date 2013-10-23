@@ -8,7 +8,11 @@
 #include "filterparser.h"
 
 #ifdef WINDOWS
+#ifdef WIN_CLIENT
+   #define LibraryExport   __declspec( dllimport )
+#else
    #define LibraryExport   __declspec( dllexport )
+#endif
 #else
    #define LibraryExport
 #endif
@@ -28,8 +32,8 @@ namespace djondb {
 	{
 		public:
 			/** Default constructor */
-			DjondbConnection(std::string host);
-			DjondbConnection(std::string host, int port);
+			DjondbConnection(const char* host);
+			DjondbConnection(const char* host, int port);
 			DjondbConnection(const DjondbConnection& orig);
 
 			/** Default destructor */
@@ -46,40 +50,40 @@ namespace djondb {
 
 			bool shutdown() const;
 
-			bool insert(const std::string& db, const std::string& ns, const std::string& json);
-			bool insert(const std::string& db, const std::string& ns, const BSONObj& obj);
-			BSONObj* findByKey(const std::string& db, const std::string& ns, const std::string& select, const std::string& id);
-			BSONObj* findByKey(const std::string& db, const std::string& ns, const std::string& id);
-			BSONArrayObj* find(const std::string& db, const std::string& ns);
-			BSONArrayObj* find(const std::string& db, const std::string& ns, const BSONObj& options);
-			BSONArrayObj* find(const std::string& db, const std::string& ns, const std::string& filter);
-			BSONArrayObj* find(const std::string& db, const std::string& ns, const std::string& filter, const BSONObj& options);
-			BSONArrayObj* find(const std::string& db, const std::string& ns, const std::string& select, const std::string& filter);
-			BSONArrayObj* find(const std::string& db, const std::string& ns, const std::string& select, const std::string& filter, const BSONObj& options);
-			bool update(const std::string& db, const std::string& ns, const std::string& json);
-			bool update(const std::string& db, const std::string& ns, const BSONObj& bson);
-			bool remove(const std::string& db, const std::string& ns, const std::string& id, const std::string& revision);
-			BSONArrayObj* executeQuery(const std::string& query);
-			bool executeUpdate(const std::string& query);
+			bool insert(const char* db, const char* ns, const char* json);
+			bool insert(const char* db, const char* ns, const BSONObj& obj);
+			BSONObj* findByKey(const char* db, const char* ns, const char* select, const char* id);
+			BSONObj* findByKey(const char* db, const char* ns, const char* id);
+			BSONArrayObj* find(const char* db, const char* ns);
+			BSONArrayObj* find(const char* db, const char* ns, const BSONObj& options);
+			BSONArrayObj* find(const char* db, const char* ns, const char* filter);
+			BSONArrayObj* find(const char* db, const char* ns, const char* filter, const BSONObj& options);
+			BSONArrayObj* find(const char* db, const char* ns, const char* select, const char* filter);
+			BSONArrayObj* find(const char* db, const char* ns, const char* select, const char* filter, const BSONObj& options);
+			bool update(const char* db, const char* ns, const char* json);
+			bool update(const char* db, const char* ns, const BSONObj& bson);
+			bool remove(const char* db, const char* ns, const char* id, const char* revision);
+			BSONArrayObj* executeQuery(const char* query);
+			bool executeUpdate(const char* query);
 
-			bool dropNamespace(const std::string& db, const std::string& ns);
-			std::vector<std::string>* dbs() const;
-			std::vector<std::string>* namespaces(const std::string& db) const;
+			bool dropNamespace(const char* db, const char* ns);
+			std::vector<char*>* dbs() const;
+			std::vector<char*>* namespaces(const char* db) const;
 
-			std::string host() const;
+			const char* host() const;
 
 		protected:
 		private:
 			void prepareOptions(Command* cmd);
-			Command* parseCommand(const std::string& expression);
+			Command* parseCommand(const char* expression);
 
 		private:
 			NetworkOutputStream*  _outputStream;
 			NetworkInputStream*   _inputStream;
 			CommandWriter*        _commandWriter;
-			std::string*          _activeTransactionId;
+			char*          _activeTransactionId;
 
-			std::string _host;
+			char* _host;
 			int _port;
 			bool _open;
 			Logger* _logger;

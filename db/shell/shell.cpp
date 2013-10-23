@@ -477,7 +477,7 @@ v8::Handle<v8::Value> insert(const v8::Arguments& args) {
 		if (__djonConnection == NULL) {
 			return v8::ThrowException(v8::String::New("You're not connected to any db, please use: connect(server, [port])"));
 		}
-		__djonConnection->insert(db, ns, json);
+		__djonConnection->insert(db.c_str(), ns.c_str(), json.c_str());
 
 		return v8::String::New("");
 	} catch (DjondbException e) {
@@ -508,7 +508,7 @@ v8::Handle<v8::Value> update(const v8::Arguments& args) {
 		if (__djonConnection == NULL) {
 			return v8::ThrowException(v8::String::New("You're not connected to any db, please use: connect(server, [port])"));
 		}
-		__djonConnection->update(db, ns, json);
+		__djonConnection->update(db.c_str(), ns.c_str(), json.c_str());
 
 		return v8::String::New("");
 	} catch (DjondbException e) {
@@ -535,7 +535,7 @@ v8::Handle<v8::Value> remove(const v8::Arguments& args) {
 		if (__djonConnection == NULL) {
 			return v8::ThrowException(v8::String::New("You're not connected to any db, please use: connect(server, [port])"));
 		}
-		__djonConnection->remove(db, ns, id, revision);
+		__djonConnection->remove(db.c_str(), ns.c_str(), id.c_str(), revision.c_str());
 
 		return v8::String::New("");
 	} catch (DjondbException e) {
@@ -577,7 +577,7 @@ v8::Handle<v8::Value> dropNamespace(const v8::Arguments& args) {
 		if (__djonConnection == NULL) {
 			return v8::ThrowException(v8::String::New("You're not connected to any db, please use: connect(server, [port])"));
 		}
-		bool result = __djonConnection->dropNamespace(db, ns);
+		bool result = __djonConnection->dropNamespace(db.c_str(), ns.c_str());
 
 		if (result) {
 			printf("ns dropped: %s", ns.c_str());
@@ -653,14 +653,15 @@ v8::Handle<v8::Value> showDbs(const v8::Arguments& args) {
 		if (__djonConnection == NULL) {
 			return v8::ThrowException(v8::String::New("You're not connected to any db, please use: connect(server, [port])"));
 		}
-		std::vector<std::string>* dbs = __djonConnection->dbs();
+		std::vector<char*>* dbs = __djonConnection->dbs();
 
 		v8::Handle<v8::Array> result = v8::Array::New();
 		int index = 0;
-		for (std::vector<std::string>::iterator i = dbs->begin(); i != dbs->end(); i++) {
-			std::string n = *i;
-			result->Set(v8::Number::New(index), v8::String::New(n.c_str()));
+		for (std::vector<char*>::iterator i = dbs->begin(); i != dbs->end(); i++) {
+			char* n = *i;
+			result->Set(v8::Number::New(index), v8::String::New(n));
 			index++;
+			free(n);
 		}
 		delete dbs;
 		return result;
@@ -682,14 +683,15 @@ v8::Handle<v8::Value> showNamespaces(const v8::Arguments& args) {
 		if (__djonConnection == NULL) {
 			return v8::ThrowException(v8::String::New("You're not connected to any db, please use: connect(server, [port])"));
 		}
-		std::vector<std::string>* ns = __djonConnection->namespaces(db);
+		std::vector<char*>* ns = __djonConnection->namespaces(db.c_str());
 
 		v8::Handle<v8::Array> result = v8::Array::New();
 		int index = 0;
-		for (std::vector<std::string>::iterator i = ns->begin(); i != ns->end(); i++) {
-			std::string n = *i;
-			result->Set(v8::Number::New(index), v8::String::New(n.c_str()));
+		for (std::vector<char*>::iterator i = ns->begin(); i != ns->end(); i++) {
+			char* n = *i;
+			result->Set(v8::Number::New(index), v8::String::New(n));
 			index++;
+			free(n);
 		}
 		delete ns;
 		return result;
@@ -733,7 +735,7 @@ v8::Handle<v8::Value> find(const v8::Arguments& args) {
 		*/
 
 	try {
-		BSONArrayObj* result = __djonConnection->find(db, ns, select, filter);
+		BSONArrayObj* result = __djonConnection->find(db.c_str(), ns.c_str(), select.c_str(), filter.c_str());
 
 		char* str = result->toChar();
 
@@ -787,7 +789,7 @@ v8::Handle<v8::Value> connect(const v8::Arguments& args) {
 		if (args.Length() == 2) {
 			port = args[1]->Int32Value();	
 		}
-		__djonConnection = DjondbConnectionManager::getConnection(server, port);
+		__djonConnection = DjondbConnectionManager::getConnection(server.c_str(), port);
 		if (__djonConnection->open()) {
 			printf("Connected to %s\n", server.c_str());
 		} else {
@@ -814,7 +816,7 @@ v8::Handle<v8::Value> executeUpdate(const v8::Arguments& args) {
 		if (__djonConnection == NULL) {
 			return v8::ThrowException(v8::String::New("You're not connected to any db, please use: connect(server, [port])"));
 		}
-		__djonConnection->executeUpdate(query);
+		__djonConnection->executeUpdate(query.c_str());
 
 		return v8::Undefined();
 	} catch (ParseException e) {
@@ -837,7 +839,7 @@ v8::Handle<v8::Value> executeQuery(const v8::Arguments& args) {
 	std::string query = ToCString(strQuery);
 
 	try {
-		BSONArrayObj* result = __djonConnection->executeQuery(query);
+		BSONArrayObj* result = __djonConnection->executeQuery(query.c_str());
 
 		if (result != NULL) {
 			char* str = result->toChar();

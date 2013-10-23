@@ -18,6 +18,11 @@ IF (NOT WIN32)
 ENDIF (NOT WIN32)
 
 IF (WIN32)
+	add_definitions(/clr )	
+	#	set( refs "System.dll" )
+	STRING(REPLACE "/EHsc" "/EHa" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+	STRING(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
+
 	include_directories("${PROJECT_SOURCE_DIR}/third_party/includes")
 
 	install (TARGETS djon-client 

@@ -35,8 +35,10 @@ if %x64% == true (
 GOTO END
 
 :ExecuteJob
+if "%debug%" == "" (
 del /S /Q build%PLATFORM%
 mkdir build%PLATFORM%
+)
 rem pause
 cd build%PLATFORM%
 rem pause

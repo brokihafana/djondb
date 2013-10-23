@@ -6,7 +6,11 @@
 #include "util.h"
 
 #ifdef WINDOWS
+#ifdef WIN_CLIENT
+   #define LibraryExport   __declspec( dllimport )
+#else
    #define LibraryExport   __declspec( dllexport )
+#endif
 #else
    #define LibraryExport
 #endif
@@ -28,8 +32,8 @@ namespace djondb {
             /** Default destructor */
             virtual ~DjondbConnectionManager();
 
-            static DjondbConnection* getConnection(std::string host);
-            static DjondbConnection* getConnection(std::string host, int port);
+            static DjondbConnection* getConnection(const char* host);
+            static DjondbConnection* getConnection(const char* host, int port);
 
             static void releaseConnection(DjondbConnection* conn);
 
