@@ -154,7 +154,7 @@ MMapInputOutputStream::MMapInputOutputStream(const char* fileName, __int64 offse
 	 if (_pFile == INVALID_HANDLE_VALUE)
 	 {
 		 char* error = getLastErrorMessage();
-		 log->error(error);
+		 log->error("error: %s", error);
 		 free(error);
 		 exit(1);
 	 }
@@ -171,7 +171,7 @@ MMapInputOutputStream::MMapInputOutputStream(const char* fileName, __int64 offse
 	 if (_hMapFile == NULL)
 	 {
 		 char* error = getLastErrorMessage();
-		 log->error(error);
+		 log->error("error: %s", error);
 		 free(error);
 		 exit(1);
 	 }
@@ -187,7 +187,7 @@ MMapInputOutputStream::MMapInputOutputStream(const char* fileName, __int64 offse
 	 if (lpMapAddress == NULL)
 	 {
 		 char* error = getLastErrorMessage();
-		 log->error(error);
+		 log->error("error: %s", error);
 		 free(error);
 		 exit(1);
 	 }
