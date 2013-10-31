@@ -20,6 +20,9 @@ if "%x64%" == "true" (
 
 
 @rem call :checkrequired unzip.exe unzippath
+if "%debug%" == "" (
+del /S /Q gtest-1.6.0
+)
 
 7za x -y gtest-1.6.0.zip
 
@@ -32,16 +35,29 @@ if "%cmakepath%" == "" (
 
 echo %cmakepath%
 
+echo %VS%
+
 cd gtest-1.6.0
 mkdir out
 cd out
-"%cmakepath%" ..
+@rem "%cmakepath%" ..
 
+if "%VS%" == "" (
+echo "VS 2010"
 if %PLATFORM% == x64 (
 	"%cmakepath%" .. -G "Visual Studio 10 Win64" -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
 )
 if %PLATFORM% == Win32 (
 	"%cmakepath%" .. -G "Visual Studio 10" -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
+)
+)
+IF "%VS%" == "VS2008" (
+if %PLATFORM% == x64 (
+	"%cmakepath%" .. -G "Visual Studio 9 2008 Win64" -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
+)
+if %PLATFORM% == Win32 (
+	"%cmakepath%" .. -G "Visual Studio 9 2008" -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
+)
 )
 %PATH_MSBUILD%\msbuild gtest.sln /p:Configuration=Release /p:Platform=%PLATFORM%
 

@@ -19,6 +19,12 @@ cd %PATH_SRC_STARTUP%
 :Win32
 if %x32% == true (
 	echo starting win32
+	if "%VS%" == "" (
+		set GEN_NAME="Visual Studio 10"
+	)
+	if "%VS%" == "VS2008" (
+		set GEN_NAME="Visual Studio 9 2008"
+	)
 	SET PLATFORM=Win32
 	SET NEXT_STEP=x64
 	GOTO ExecuteJob
@@ -27,6 +33,12 @@ if %x32% == true (
 :x64
 if %x64% == true (
 	echo starting x64
+	if "%VS%" == "" (
+		set GEN_NAME="Visual Studio 10 Win64"
+	)
+	if "%VS%" == "VS2008" (
+		set GEN_NAME="Visual Studio 9 2008 Win64"
+	)
 	SET PLATFORM=x64
 	SET NEXT_STEP=END
 	GOTO ExecuteJob
@@ -43,12 +55,14 @@ rem pause
 cd build%PLATFORM%
 rem pause
 rem cmake .. -G "Visual Studio 10 Win64"  -DCMAKE_BUILD_TYPE=Debug
-if %PLATFORM% == x64 (
-	cmake .. -G "Visual Studio 10 Win64" -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
-)
-if %PLATFORM% == Win32 (
-	cmake .. -G "Visual Studio 10" -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
-)
+
+cmake .. -G %GEN_NAME% -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
+@rem if %PLATFORM% == x64 (
+@rem 	cmake .. -G "Visual Studio 10 Win64" -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
+@rem )
+@rem if %PLATFORM% == Win32 (
+@rem 	cmake .. -G "Visual Studio 10" -DPLATFORM_NAME=%PLATFORM% -DCMAKE_BUILD_TYPE=Release
+@rem )
 rem pause
 rem %PATH_MSBUILD%\msbuild djondb.sln /t:Rebuild /p:Configuration=Release /p:Platform=%PLATFORM%
 %PATH_MSBUILD%\msbuild djondb.sln /p:Configuration=Release /p:Platform=%PLATFORM%

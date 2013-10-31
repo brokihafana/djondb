@@ -46,16 +46,22 @@ if NOT EXIST third_party\cygwin (
 
 @rem ..\patch\bin\patch --binary -R -p1 build\common.gypi ..\v8_mt.patch
 
+set msversion=2010
+
+if "%VS%" == "VS2008" (
+   set msversion=2008
+)
+
 if "%x64%" == "true" (
 echo Executing python
 	@rem "%pythonpath%" build\gyp_v8 -Dtarget_arch=x64 -Dcomponent=static_library -G msvs_version=2010
-	"%pythonpath%" build\gyp_v8 -Dtarget_arch=x64 -Dcomponent=shared_library -G msvs_version=2010
+	"%pythonpath%" build\gyp_v8 -Dtarget_arch=x64 -Dcomponent=shared_library -G msvs_version=%msversion%
 	@rem "%pythonpath%" build\gyp_v8 -Dtarget_arch=x64 -G msvs_version=2010
 )
 if "%x32%" == "true" (
 echo Executing python
 	@rem "%pythonpath%" build\gyp_v8 -Dtarget_arch=ia32 -Dcomponent=static_library -G msvs_version=2010
-	"%pythonpath%" build\gyp_v8 -Dtarget_arch=ia32 -Dcomponent=shared_library -G msvs_version=2010
+	"%pythonpath%" build\gyp_v8 -Dtarget_arch=ia32 -Dcomponent=shared_library -G msvs_version=%msversion%
 	@rem "%pythonpath%" build\gyp_v8 -Dtarget_arch=ia32 -G msvs_version=2010
 )
 

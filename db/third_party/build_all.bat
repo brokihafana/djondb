@@ -22,6 +22,7 @@ if "%svnpath%" == "" (
 )
 
 call buildantlr.bat %*
+pause
 call buildgtest.bat %*
 call buildpthread.bat %*
 call buildv8.bat %*

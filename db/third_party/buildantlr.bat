@@ -1,4 +1,4 @@
-@echo off
+@rem @echo off
 setlocal enabledelayedexpansion
 
 if [%1] ==[] goto usage
@@ -22,7 +22,15 @@ IF NOT EXIST includes mkdir includes
 tartool libantlr3c-3.4.tar.gz
 cd libantlr3c-3.4
 
-%PATH_MSBUILD%\msbuild C.sln /p:Configuration=Release /p:Platform=%PLATFORM%
+if "%VS%" == "VS2008" (
+   set SLNFILE=C2008.sln
+)
+if "%VS%" == "" (
+   set SLNFILE=C.sln
+)
+
+echo %SLNFILE%
+%PATH_MSBUILD%\msbuild %SLNFILE% /p:Configuration=Release /p:Platform=%PLATFORM%
 
 copy /Y Release\antlr3c.lib ..\libs
 copy /Y antlr3config.h ..\includes\

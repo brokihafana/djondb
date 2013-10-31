@@ -9,8 +9,20 @@
 @popd
 
 @rem Applications Paths
+@set VS=VS2008
+
+if "%VS%" == "VS2005" (
+@set PATH_MSBUILD=C:\Windows\Microsoft.NET\Framework\v2.0.50727
+@set PATH_MSBUILD_x64=C:\Windows\Microsoft.NET\Framework64\v2.0.50727
+)
+if "%VS%" == "VS2008" (
+@set PATH_MSBUILD=C:\Windows\Microsoft.NET\Framework\v3.5
+@set PATH_MSBUILD_x64=C:\Windows\Microsoft.NET\Framework64\v3.5
+)
+if "%VS%" == "" (
 @SET PATH_MSBUILD=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319
 @SET PATH_MSBUILD_x64=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319
+)
 
 @echo source dir: %PATH_SRC_STARTUP%
 

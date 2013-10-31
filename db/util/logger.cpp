@@ -30,6 +30,7 @@
 #ifndef WINDOWS
 	#include <syslog.h>
 #else
+#if WINDOWS_SERVICE
 	#using <mscorlib.dll> 
 	#include <vcclr.h> 
 	using namespace System; 
@@ -70,6 +71,7 @@
 			System::Diagnostics::EventLog::WriteEntry("djondb", sLogEntry.str, type);
 		}
 	};
+#endif
 
 #endif
 
